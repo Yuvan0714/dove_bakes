@@ -33,8 +33,11 @@ $cakes = $pdo->query("SELECT * FROM cakes ORDER BY id DESC")->fetchAll();
                   <li><a href="menu.php" style="color:var(--primary-teal)">Cakes</a></li>
               </ul>
           </nav>
-          <div class="cart-btn">
-              <i class="fa-solid fa-cart-shopping"></i>
+          <div style="display:flex; align-items:center;">
+              <a href="javascript:void(0)" class="nav-wa-icon" onclick="openWhatsApp()" style="margin-right: 15px;"><i class="fa-brands fa-whatsapp"></i></a>
+              <div class="cart-btn">
+                  <i class="fa-solid fa-cart-shopping"></i>
+              </div>
           </div>
           <div class="mobile-toggle">
               <i class="fa-solid fa-bars"></i>
@@ -78,93 +81,7 @@ $cakes = $pdo->query("SELECT * FROM cakes ORDER BY id DESC")->fetchAll();
       </div>
   </section>
 
-  <!-- Payment Gateway Modal -->
-  <div class="payment-overlay" id="payment-modal">
-      <div class="payment-modal-content">
-          <button class="close-modal" id="close-payment"><i class="fa-solid fa-xmark"></i></button>
-          
-          <div class="payment-header">
-              <h3>Secure Checkout</h3>
-              <p>Complete your purchase for <strong id="checkout-product">Product</strong></p>
-          </div>
-          
-          <div class="payment-amount">
-              <span class="currency">₹</span>
-              <span id="checkout-price">0.00</span>
-          </div>
-          
-          <form class="payment-form" id="checkout-form" onsubmit="event.preventDefault();">
-              <input type="hidden" id="selected-payment-method" value="Card">
-              <div class="payment-methods">
-                  <div class="method active" data-method="Card"><i class="fa-regular fa-credit-card"></i> Card</div>
-                  <div class="method" data-method="UPI"><i class="fa-brands fa-google-pay"></i> UPI</div>
-                  <div class="method" data-method="Netbanking"><i class="fa-solid fa-building-columns"></i> Netbanking</div>
-              </div>
-              
-              <!-- Card Inputs -->
-              <div id="card-inputs" class="payment-inputs-group active-group">
-                  <div class="form-group">
-                      <label for="card-name">Name on Card</label>
-                      <input type="text" id="card-name" placeholder="John Doe" required>
-                  </div>
-                  <div class="form-group">
-                      <label for="card-num">Card Number</label>
-                      <div class="input-with-icon">
-                          <i class="fa-brands fa-cc-visa" style="color:var(--text-light)"></i>
-                          <input type="text" id="card-num" placeholder="0000 0000 0000 0000" maxlength="19" required>
-                      </div>
-                  </div>
-                  <div class="form-row" style="display:flex; gap:15px;">
-                      <div class="form-group" style="flex:1;">
-                          <label for="expiry">Expiry</label>
-                          <input type="text" id="expiry" placeholder="MM/YY" maxlength="5" required>
-                      </div>
-                      <div class="form-group" style="flex:1;">
-                          <label for="cvv">CVV</label>
-                          <input type="password" id="cvv" placeholder="123" maxlength="3" required>
-                      </div>
-                  </div>
-              </div>
-
-              <!-- UPI Inputs -->
-              <div id="upi-inputs" class="payment-inputs-group" style="display:none;">
-                  <div class="form-group">
-                      <label for="upi-id">UPI ID</label>
-                      <div class="input-with-icon">
-                          <i class="fa-solid fa-at" style="color:var(--text-light)"></i>
-                          <input type="text" id="upi-id" placeholder="username@upi">
-                      </div>
-                  </div>
-              </div>
-
-              <!-- Netbanking Inputs -->
-              <div id="netbanking-inputs" class="payment-inputs-group" style="display:none;">
-                  <div class="form-group">
-                      <label for="bank-select">Select Bank</label>
-                      <select id="bank-select" style="width: 100%; padding: 12px 15px; border: 1px solid rgba(0,0,0,0.1); border-radius: 10px; font-family: inherit;">
-                          <option value="">Choose a bank...</option>
-                          <option value="sbi">State Bank of India</option>
-                          <option value="hdfc">HDFC Bank</option>
-                          <option value="icici">ICICI Bank</option>
-                          <option value="axis">Axis Bank</option>
-                      </select>
-                  </div>
-              </div>
-              
-              <button type="submit" class="btn btn-primary btn-block btn-pay" id="pay-btn">
-                  <span class="pay-text">Pay Now</span>
-                  <div class="spinner" style="display:none;"><i class="fa-solid fa-circle-notch fa-spin"></i> Processing...</div>
-              </button>
-          </form>
-          
-          <div class="payment-success" id="payment-success">
-              <div class="success-icon"><i class="fa-solid fa-circle-check"></i></div>
-              <h3>Payment Successful!</h3>
-              <p>Your order for <span id="success-product" style="font-weight:600;color:var(--dark-teal)"></span> has been placed.</p>
-              <button class="btn btn-primary btn-block" id="continue-shopping">Continue Shopping</button>
-          </div>
-      </div>
-  </div>
+  <!-- Payment Gateway Modal Removed -->
 
   <!-- Slide-in Cart -->
   <div class="cart-overlay" id="cart-overlay"></div>
@@ -181,15 +98,23 @@ $cakes = $pdo->query("SELECT * FROM cakes ORDER BY id DESC")->fetchAll();
               <span>Total:</span>
               <span class="total-price" id="cart-total-price">₹0</span>
           </div>
-          <button class="btn btn-primary btn-block" id="checkout-btn">Proceed to Checkout</button>
+          <button class="btn btn-whatsapp btn-block" id="checkout-btn" onclick="openWhatsApp()"><i class="fa-brands fa-whatsapp"></i> Order on WhatsApp</button>
       </div>
   </div>
 
   <footer>
       <div class="container footer-content" style="text-align: center; padding: 20px;">
+          <div style="margin-bottom: 15px;">
+              <a href="javascript:void(0)" onclick="openWhatsApp()" style="color: #25D366; font-size: 2rem;"><i class="fa-brands fa-whatsapp"></i></a>
+          </div>
           <p>&copy; 2026 Dove Bakes. All rights reserved.</p>
       </div>
   </footer>
+
+  <!-- Floating WhatsApp Button -->
+  <a href="javascript:void(0)" class="wa-floating-btn" onclick="openWhatsApp()">
+      <i class="fa-brands fa-whatsapp"></i>
+  </a>
 
   <script src="script.js"></script>
 </body>

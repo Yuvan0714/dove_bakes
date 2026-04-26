@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.nav-links a').forEach(link => {
         link.addEventListener('click', () => {
             navLinks.classList.remove('active');
-            if(mobileToggle){
+            if (mobileToggle) {
                 mobileToggle.querySelector('i').classList.replace('fa-times', 'fa-bars');
             }
         });
@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 4. Parallax Effect
     const hero = document.querySelector('.hero');
     window.addEventListener('scroll', () => {
-        if(hero && window.pageYOffset < hero.offsetHeight) {
+        if (hero && window.pageYOffset < hero.offsetHeight) {
             hero.style.backgroundPositionY = `${window.pageYOffset * 0.5}px`;
         }
     });
@@ -145,138 +145,27 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 6. Payment Gateway Logic
-    const paymentModal = document.getElementById('payment-modal');
-    const closePaymentBtn = document.getElementById('close-payment');
-    const checkoutBtn = document.getElementById('checkout-btn');
-    const checkoutProduct = document.getElementById('checkout-product');
-    const checkoutPrice = document.getElementById('checkout-price');
-    const checkoutForm = document.getElementById('checkout-form');
-    const payBtn = document.getElementById('pay-btn');
-    const payText = document.querySelector('.pay-text');
-    const spinner = document.querySelector('.spinner');
-    const paymentSuccess = document.getElementById('payment-success');
-    const continueShoppingBtn = document.getElementById('continue-shopping');
-    const paymentMethods = document.querySelectorAll('.method');
-    const paymentInputsGroups = document.querySelectorAll('.payment-inputs-group');
-    const selectedMethodInput = document.getElementById('selected-payment-method');
+    // 6. WhatsApp Integration Logic
+    window.openWhatsApp = () => {
+        // [Replace with your real WhatsApp number]
+        const storeNumber = '6374845889';
+        let message = '';
 
-    // Dynamic Payment Methods
-    paymentMethods.forEach(method => {
-        method.addEventListener('click', () => {
-            // Update active styling
-            paymentMethods.forEach(m => m.classList.remove('active'));
-            method.classList.add('active');
-            
-            const methodType = method.getAttribute('data-method');
-            selectedMethodInput.value = methodType;
-            
-            // Hide all input groups
-            paymentInputsGroups.forEach(group => {
-                group.style.display = 'none';
-            });
-            
-            // Show corresponding input group
-            if(methodType === 'Card') document.getElementById('card-inputs').style.display = 'block';
-            else if(methodType === 'UPI') document.getElementById('upi-inputs').style.display = 'block';
-            else if(methodType === 'Netbanking') document.getElementById('netbanking-inputs').style.display = 'block';
-        });
-    });
+        if (cart.length > 0) {
+            let total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            let itemsText = cart.map(item => `${item.quantity} ${item.product}`).join('%0A');
 
-    // Open Checkout from Cart
-    checkoutBtn.addEventListener('click', () => {
-        if(cart.length === 0) return alert('Your cart is empty!');
-        
-        let total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-        let productsStr = cart.map(item => `${item.product} (x${item.quantity})`).join(', ');
-        
-        checkoutProduct.textContent = productsStr;
-        checkoutPrice.textContent = total.toLocaleString('en-IN') + '.00';
-        document.getElementById('success-product').textContent = productsStr;
-        
-        closeCart(); // Close cart sidebar
-        
-        // Reset form
-        checkoutForm.reset();
-        paymentSuccess.classList.remove('active');
-        checkoutForm.style.opacity = '1';
-        checkoutForm.style.visibility = 'visible';
-        payBtn.style.display = 'block';
-        
-        paymentModal.classList.add('active');
-        document.body.style.overflow = 'hidden';
-    });
+            message = `Hello Dove Bakes, I would like to order:%0A%0A${itemsText}%0A%0ATotal: ₹${total}%0A%0APlease confirm my order. Thank you!`;
+        } else {
+            message = `Hello Dove Bakes, I would like to know more about your cakes, custom orders, pricing, and availability. Please share the details. Thank you!`;
+        }
 
-    const closePaymentModal = () => {
-        paymentModal.classList.remove('active');
-        document.body.style.overflow = '';
-        setTimeout(() => {
-            paymentSuccess.classList.remove('active');
-            checkoutForm.style.opacity = '1';
-            checkoutForm.style.visibility = 'visible';
-            payBtn.style.display = 'block';
-        }, 500);
+        const whatsappUrl = `https://wa.me/${storeNumber}?text=${message}`;
+        window.open(whatsappUrl, '_blank');
+
+        // Optional: close cart after opening WA
+        if (cartSidebar.classList.contains('active')) {
+            closeCart();
+        }
     };
-
-    closePaymentBtn.addEventListener('click', closePaymentModal);
-    continueShoppingBtn.addEventListener('click', () => {
-        closePaymentModal();
-        cart = []; // Empty cart after success
-        saveCart();
-    });
-
-    paymentModal.addEventListener('click', (e) => {
-        if (e.target === paymentModal) closePaymentModal();
-    });
-
-    checkoutForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        
-        // Simulate processing and AJAX to checkout.php
-        payText.style.display = 'none';
-        spinner.style.display = 'inline-block';
-        payBtn.disabled = true;
-        payBtn.style.opacity = '0.8';
-        
-        // Prepare data to send to server
-        const orderData = {
-            cart: cart,
-            total: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
-            payment_method: selectedMethodInput.value,
-            customer_name: 'Guest User', // Hardcoded for demo, normally from form
-            customer_email: 'guest@example.com'
-        };
-
-        fetch('checkout.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(orderData)
-        })
-        .then(res => res.json())
-        .then(data => {
-            // Processing complete
-            payText.style.display = 'inline';
-            spinner.style.display = 'none';
-            payBtn.disabled = false;
-            payBtn.style.opacity = '1';
-            
-            if(data.success) {
-                // Show success animation
-                checkoutForm.style.opacity = '0';
-                checkoutForm.style.visibility = 'hidden';
-                payBtn.style.display = 'none';
-                setTimeout(() => paymentSuccess.classList.add('active'), 300);
-            } else {
-                alert("Payment failed: " + data.message);
-            }
-        })
-        .catch(err => {
-            console.error(err);
-            alert("An error occurred during checkout.");
-            payText.style.display = 'inline';
-            spinner.style.display = 'none';
-            payBtn.disabled = false;
-            payBtn.style.opacity = '1';
-        });
-    });
 });

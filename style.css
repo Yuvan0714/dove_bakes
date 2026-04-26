@@ -881,223 +881,64 @@ footer {
     z-index: 10;
 }
 
-/* Payment Gateway Modal */
-.payment-overlay {
+/* WhatsApp Styling */
+.wa-floating-btn {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(38, 70, 83, 0.6);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    z-index: 2000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-    perspective: 1000px;
-}
-
-.payment-overlay.active {
-    opacity: 1;
-    visibility: visible;
-}
-
-.payment-modal-content {
-    background: var(--white);
-    width: 90%;
-    max-width: 450px;
-    border-radius: var(--border-radius);
-    padding: 40px 30px;
-    position: relative;
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
-    /* Cooler initial state */
-    transform: rotateX(20deg) translateY(50px) scale(0.9);
-    opacity: 0;
-    transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    transform-origin: bottom center;
-}
-
-.payment-overlay.active .payment-modal-content {
-    transform: rotateX(0) translateY(0) scale(1);
-    opacity: 1;
-}
-
-.close-modal {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: var(--light-teal);
-    border: none;
-    width: 35px;
-    height: 35px;
+    bottom: 30px;
+    right: 30px;
+    background-color: #25D366;
+    color: white;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
-    font-size: 1.2rem;
-    color: var(--dark-teal);
-    cursor: pointer;
-    transition: var(--transition);
     display: flex;
     justify-content: center;
     align-items: center;
+    font-size: 35px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    z-index: 1000;
+    transition: all 0.3s ease;
+    text-decoration: none;
 }
 
-.close-modal:hover {
-    background: var(--pastel-pink);
-    transform: rotate(90deg);
+.wa-floating-btn:hover {
+    background-color: #128C7E;
+    transform: scale(1.1);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.4);
+    color: white;
 }
 
-.payment-header {
-    text-align: center;
-    margin-bottom: 25px;
-}
-
-.payment-header h3 {
-    color: var(--dark-teal);
-    font-size: 1.8rem;
-    margin-bottom: 5px;
-}
-
-.payment-header p {
-    color: var(--text-light);
-    font-size: 0.95rem;
-}
-
-.payment-amount {
-    text-align: center;
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: var(--primary-teal);
-    margin-bottom: 30px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.payment-amount .currency {
+.nav-wa-icon {
     font-size: 1.5rem;
-    margin-right: 5px;
-    align-self: flex-start;
-    margin-top: 5px;
-}
-
-.payment-methods {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 25px;
-}
-
-.method {
-    flex: 1;
-    padding: 10px;
-    text-align: center;
-    border: 1px solid #eee;
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    color: var(--text-light);
+    color: var(--white);
     transition: var(--transition);
     display: flex;
-    flex-direction: column;
-    gap: 5px;
     align-items: center;
+    margin-left: 15px;
 }
 
-.method i {
-    font-size: 1.2rem;
+.nav-wa-icon:hover {
+    color: #25D366;
+    transform: scale(1.1);
 }
 
-.method.active {
-    border-color: var(--primary-teal);
-    background: var(--light-teal);
-    color: var(--primary-teal);
-    font-weight: 500;
+header.scrolled .nav-wa-icon {
+    color: #25D366;
 }
 
-.input-with-icon {
-    position: relative;
+.btn-whatsapp {
+    background-color: #25D366;
+    color: white;
+    border: none;
 }
 
-.input-with-icon i {
-    position: absolute;
-    left: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 1.2rem;
+.btn-whatsapp:hover {
+    background-color: #128C7E;
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 12px 25px rgba(37, 211, 102, 0.4);
 }
 
-.input-with-icon input {
-    padding-left: 45px;
-}
-
-.btn-pay {
-    margin-top: 15px;
-    position: relative;
-    overflow: hidden;
-}
-
-.payment-success {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: var(--white);
-    border-radius: var(--border-radius);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 40px;
-    text-align: center;
-    opacity: 0;
-    visibility: hidden;
-    transform: scale(0.9);
-    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    z-index: 10;
-}
-
-.payment-success.active {
-    opacity: 1;
-    visibility: visible;
-    transform: scale(1);
-}
-
-.success-icon {
-    width: 80px;
-    height: 80px;
-    background: var(--light-teal);
-    color: var(--primary-teal);
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 3rem;
-    margin-bottom: 20px;
-}
-
-.payment-success.active .success-icon {
-    animation: successPop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.2s both;
-}
-
-@keyframes successPop {
-    0% { transform: scale(0); }
-    80% { transform: scale(1.2); }
-    100% { transform: scale(1); }
-}
-
-.payment-success h3 {
-    color: var(--dark-teal);
-    font-size: 1.8rem;
-    margin-bottom: 10px;
-}
-
-.payment-success p {
-    color: var(--text-light);
-    margin-bottom: 30px;
-}
 
 /* Responsive Design */
 @media (max-width: 992px) {

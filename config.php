@@ -5,9 +5,53 @@ $dbname = 'dove_bakes_db';
 $username = 'root'; // default xampp username
 $password = '';     // default xampp password
 
+$default_cakes = [
+    [
+        'id' => 1,
+        'name' => 'Chocolate Fudge Cake',
+        'description' => 'Rich layers of dark chocolate cake covered in smooth fudge frosting.',
+        'price' => 2900.00,
+        'image' => 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=600&q=80',
+        'availability' => 1
+    ],
+    [
+        'id' => 2,
+        'name' => 'Vanilla Dream Cake',
+        'description' => 'Light and fluffy vanilla sponge with Madagascar vanilla bean buttercream.',
+        'price' => 2600.00,
+        'image' => 'https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?auto=format&fit=crop&w=600&q=80',
+        'availability' => 1
+    ],
+    [
+        'id' => 3,
+        'name' => 'Red Velvet Delight',
+        'description' => 'Classic moist red velvet with signature tangy cream cheese frosting.',
+        'price' => 3100.00,
+        'image' => 'https://images.unsplash.com/photo-1616541823729-00fe0aacd32c?auto=format&fit=crop&w=600&q=80',
+        'availability' => 1
+    ]
+];
+
+// Provide a mock PDO class for fallback
+class MockPDO {
+    private $cakes;
+    public function __construct($c) { $this->cakes = $c; }
+    public function query($sql) {
+        return new MockPDOStatement($this->cakes);
+    }
+    public function prepare($sql) {
+        return new MockPDOStatement($this->cakes);
+    }
+}
+class MockPDOStatement {
+    private $data;
+    public function __construct($d) { $this->data = $d; }
+    public function fetchAll() { return $this->data; }
+    public function execute($params = []) { return true; }
+}
+
 try {
-    // Note: If dove_bakes_db doesn't exist, this will throw an error. 
-    // We attempt to connect without db first to create it if needed.
+    // Attempt to connect to MySQL
     $tempPdo = new PDO("mysql:host=$host;charset=utf8mb4", $username, $password);
     $tempPdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $tempPdo->exec("CREATE DATABASE IF NOT EXISTS `$dbname`");
@@ -74,7 +118,8 @@ try {
         ");
     }
 
-} catch(PDOException $e) {
-    die("Connection failed: " . $e->getMessage() . " - Ensure MySQL is running on localhost with root user and no password.");
+} catch(Exception $e) {
+    // If MySQL connection fails, fallback to MockPDO to allow local execution without DB
+    $pdo = new MockPDO($default_cakes);
 }
 ?>
